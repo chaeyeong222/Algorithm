@@ -1,34 +1,35 @@
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
+import java.io.*;
 
-public class Main {
-    static int n, start;
-    static boolean ch[];
-    static ArrayList<Integer> list;
-
-    public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
-        n = scan.nextInt();
-        list = new ArrayList<>();
-        list.add(0); //허수
+class Main {
+    static boolean[] check;
+    static int[] stone;
+    static int n;
+    public static void main(String args[]) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        n = Integer.parseInt(br.readLine());
+        stone = new int[n];
+        check = new boolean[n];
+        StringTokenizer st = new StringTokenizer(br.readLine());
         for (int i = 0; i < n; i++) {
-            list.add(scan.nextInt());
+            stone[i] = Integer.parseInt(st.nextToken());
         }
-        start = scan.nextInt();
-        ch = new boolean[n+1];
-        jump(start);
+        int start = Integer.parseInt(br.readLine());
+        bfs(start-1);
+
         int cnt = 0;
-        for (int i = 1; i <= n; i++) {
-            if(ch[i]) cnt++;
+        for (int i = 0; i < check.length; i++) {
+            if(check[i]) cnt++;
         }
         System.out.println(cnt);
+
     }
-    static void jump(int now){
-        if(now<=0 || now>n ||  ch[now] ){ //탈출조건
+    public static void bfs(int now){
+        if(now<0 || now>=n || check[now]){
             return;
         }
-        ch[now] = true;
-        jump(now+list.get(now));
-        jump(now-list.get(now));
+        check[now]=true;
+        bfs(now+stone[now]);
+        bfs(now-stone[now]); 
     }
 }
