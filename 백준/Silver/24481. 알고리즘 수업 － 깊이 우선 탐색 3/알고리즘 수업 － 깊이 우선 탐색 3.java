@@ -1,49 +1,54 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 
 public class Main {
-    static List<Integer>[] list;
+    static int N, M;
     static int[] visited;
-    public static void main(String[] args) throws IOException {
+    static List<Integer>[] list;
+
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int n = Integer.parseInt(st.nextToken()); //정점수
-        int m = Integer.parseInt(st.nextToken()); //간선수
-        int r = Integer.parseInt(st.nextToken()); //시작정점
-        visited = new int[n+1];
 
-        list = new ArrayList[n + 1];
-        for (int i = 0; i < list.length; i++) {
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        int R = Integer.parseInt(st.nextToken());
+
+        list = new ArrayList[N + 1];
+        for (int i = 1; i <= N; i++) {
             list[i] = new ArrayList<>();
         }
-        Arrays.fill(visited, -1);
-        for (int i = 0; i < m; i++) {
+        //입력받은 값 넣기
+        for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
             int num1 = Integer.parseInt(st.nextToken());
             int num2 = Integer.parseInt(st.nextToken());
             list[num1].add(num2);
             list[num2].add(num1);
         }
-        for (int i = 0; i < list.length; i++) {
+
+        for (int i = 1; i < list.length; i++) {
             Collections.sort(list[i]);
         }
 
-        dfs(r,0);
+        visited = new int[N + 1];
+        Arrays.fill(visited, -1);
+
+        dfs(R, 0);
 
         for (int i = 1; i < visited.length; i++) {
             System.out.println(visited[i]);
         }
 
-    }
-    public static void dfs(int num, int depth){
-        if(visited[num]!=-1){
+    }//
+
+    public static void dfs(int now, int depth) {
+        if (visited[now] != -1) {
             return;
         }
-        visited[num] = depth;
-        for (int aa : list[num]) {
-            dfs(aa, depth+1);
+        visited[now] = depth;
+        for (int aa : list[now]) {
+            dfs(aa, depth + 1);
         }
     }
 }
