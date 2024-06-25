@@ -1,42 +1,64 @@
 import java.util.*;
 import java.io.*;
 class Solution {
-    List<Integer>[] list;  
-    int[] cost; //한번만 bfs 해서 통과하도록
     public int[] solution(int n, int[][] roads, int[] sources, int destination) {
-        int[] answer = new int[sources.length]; 
-        cost = new int[n+1];
-        //연결된 애들 정보
-        list = new ArrayList[n+1];
-        for(int i=0; i<=n; i++){
-            list[i] = new ArrayList<>();
+        int[] answer = new int[sources.length];
+        ArrayList<ArrayList<Node>> list = new ArrayList<ArrayList<Node>>();
+        for(int i=0; i<=n; i++){ 
+            list.add(new ArrayList<Node>()); 
         }
+        
         for(int i=0; i<roads.length; i++){
-            int spotA = roads[i][0];
-            int spotB = roads[i][1];
-            list[spotA].add(spotB);
-            list[spotB].add(spotA);
+            int spot1 = roads[i][0];
+            int spot2 = roads[i][1];
+            list.get(spot1).add(new Node(spot2,1)); 
+            list.get(spot2).add(new Node(spot1,1)); 
         }
-        Arrays.fill(cost, -1); //없으면 -1 출력하도록
-        find(destination); //부대원들 위치별로 도착지까지의 거리 확인하기  
-        for(int i=0; i<sources.length; i++){
-            answer[i] = cost[sources[i]];
+        
+        //다익스트라 시작
+        int[] dist = new int[n+1]; //가중치
+        for(int i=0; i<n+1; i++){
+            dist[i] = Integer.MAX_VALUE;
         }
-        return answer;
-    }
-    public void find(int start){
-        Queue<Integer> que = new LinkedList<>();
-        que.add(start);
-        cost[start] = 0;
+        PriorityQueue<Node> que = new PriorityQueue<Node>((o1,o2)->Integer.compare(o1.cost,o2.cost));
+        que.offer(new Node(destination,0));
+        dist[destination] = 0;
         while(!que.isEmpty()){
-            int now = que.poll();
-            for(int temp : list[now]){
-                if(cost[temp]==-1){
-                    cost[temp] = cost[now]+1;
-                    que.add(temp);
+            Node curNode = que.poll();
+            if(dist[curNode.idx] < curNode.cost){
+                continue;
+            }
+            for(int i=0; i<list.get(curNode.idx).size(); i++){
+                Node nextNode = list.get(curNode.idx).get(i);
+                if(dist[nextNode.idx]>nextNode.cost+curNode.cost){
+                    dist[nextNode.idx] = nextNode.cost+curNode.cost;
+                    que.offer(new Node(nextNode.idx, dist[nextNode.idx]));
                 }
             }
+        }//while
+        
+        for(int i=0; i<sources.length; i++){
+            if(dist[sources[i]]==Integer.MAX_VALUE){
+                answer[i] = -1;
+            }else{
+                answer[i] = dist[sources[i]];
+            }
+            
         }
-        return;
+                                                          
+        
+                                
+        
+        
+        
+        
+        return answer;
+    }
+}
+class Node{
+    int idx, cost;
+    Node(int idx, int cost){
+        this.idx = idx;
+        this.cost = cost;
     }
 }
