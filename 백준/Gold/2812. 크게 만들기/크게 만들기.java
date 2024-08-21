@@ -37,15 +37,11 @@ public class Main {
         while(stack.size() > (n-minus)){
             stack.pop();
         }
-
         StringBuilder sb = new StringBuilder();
         while (!stack.isEmpty()){
-            sb.insert(0, stack.pop());
+            sb.append(stack.pop());
         }
-        System.out.println(sb);
-
-
-
+        System.out.println(sb.reverse());
     }
 
 }
