@@ -19,18 +19,17 @@ public class Main {
         stack.push(num.charAt(0)-'0');
         for (int i = 1; i < n; i++) {
             while(true){
+                int next = num.charAt(i)-'0';
                 if(stack.isEmpty() || k==0) {
-                    stack.push((num.charAt(i)-'0'));
+                    stack.push(next);
                     break;
                 }
-                if(stack.peek() < (num.charAt(i)-'0')){
-                    if(k>0) {
-                        stack.pop();
-                        k--;
-                    }
-                }else{
-                    stack.push((num.charAt(i)-'0'));
+                if(stack.peek() >= next){
+                    stack.push(next);
                     break;
+                }
+                if(k-->0) {
+                    stack.pop();
                 }
             }//while
         }
