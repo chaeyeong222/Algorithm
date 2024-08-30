@@ -1,7 +1,7 @@
 
 import java.io.*;
 import java.util.*;
-//##14890 경사로
+//##2304 창고다각형
 public class Main {
     static int sum, n, maxHIdx;
     static int[][] num;
@@ -33,8 +33,7 @@ public class Main {
                 break;
             }
         }
-        sum=0;//합계
-
+        sum=0;//합계 
         //높은기둥 기준 왼쪽
         leftSide();
         //높은기둥 기준 오른쪽
@@ -45,40 +44,20 @@ public class Main {
         Stack<Integer> stack = new Stack<>(); //스택에 들어가는 값은 idx
         stack.push(0);//
         for (int i = 1; i <= maxHIdx; i++) { //2부터 0까지
-            while(true) {
-                if (stack.isEmpty()) {
-                    stack.push(i);
-                    break;
-                }
-                if(num[i][1]==0) break;
-                else if(num[stack.peek()][1] <= num[i][1]){ //현재 스택에 있는 애보다 큰 애를 만나면
-                    sum+=(num[i][0]-num[stack.peek()][0])*num[stack.peek()][1]; //지금까지의 다각형 더해주고
-                    stack.push(i); //다음애를 넣어준다
-                    break;
-                } //다음애가 작으면
-                break;
-//                stack.pop();
+            if(num[i][1]!=0 && num[stack.peek()][1] <= num[i][1]){ //현재 스택에 있는 애보다 큰 애를 만나면
+                sum+=(num[i][0]-num[stack.peek()][0])*num[stack.peek()][1]; //지금까지의 다각형 더해주고
+                stack.push(i); //다음애를 넣어준다
             }
-        } 
+        }
     }//leftside
 
     public static void rightSide(){
         Stack<Integer> stack = new Stack<>();
         stack.push(n-1);//가장 처음 idx 넣어줌
         for (int i = n-2; i >= maxHIdx; i--) {
-            while(true) {
-                if (stack.isEmpty()) { //스택이 비어있다면 좌측에 더 큰 값 없음.
-                    stack.push(i);
-                    break;
-                }
-                if(num[i][1]==0) break;
-                else if(num[stack.peek()][1] <= num[i][1]){
-                    sum+=(num[stack.peek()][0]-num[i][0])*num[stack.peek()][1];
-                    stack.push(i);
-                    break;
-                }else break;
-
-//                stack.pop();
+            if(num[i][1]!=0 && num[stack.peek()][1] <= num[i][1]){
+                sum+=(num[stack.peek()][0]-num[i][0])*num[stack.peek()][1];
+                stack.push(i);
             }
         }
     }//rightside
