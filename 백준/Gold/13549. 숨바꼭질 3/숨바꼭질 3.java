@@ -22,7 +22,8 @@ public class Main {
         while(!que.isEmpty()){
             int[] now = que.poll();
             if(now[0]==sis) {
-                cnt = Math.min(now[1], cnt);
+//                cnt = Math.min(now[1], cnt);
+                cnt = now[1];
             }
             if(now[0]*2 <=100000 && !visited[now[0]*2]) {
                 visited[now[0]*2]= true;
