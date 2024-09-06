@@ -37,11 +37,8 @@ class Main {
         }
         answer = map.size();
 
-        checkSushi(0,k, bonusInBelt);
-        if(bonusInBelt) System.out.println(answer);
-        else {
-            System.out.println(answer);
-        }
+        checkSushi(0,k, bonusInBelt); 
+        System.out.println(answer); 
 
 
     }
