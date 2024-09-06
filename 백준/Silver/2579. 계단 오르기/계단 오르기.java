@@ -1,25 +1,27 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-
-public class Main {
-
-    public static void main(String[] args)throws Exception{
-
+import java.io.*;
+import java.util.*;
+//#2579 계단오르기
+class Main {
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine());
-        int[] dp = new int[n+1];
-        int[] stairs = new int[n+1];
+        int n = Integer.parseInt(br.readLine()); // 계단 개수
+        int[] step = new int[n+1];
         for (int i = 1; i <= n; i++) {
-            stairs[i] = Integer.parseInt(br.readLine());
-        }
-        dp[1] = stairs[1];
+            step[i] = Integer.parseInt(br.readLine());
+        }//입력
+        int[] result = new int[n+1];
+        result[1] = step[1];
         if(n>=2){
-            dp[2] = stairs[1]+stairs[2];
+            result[2] = step[1]+step[2];
         }
+
         for (int i = 3; i <= n; i++) {
-            dp[i] = Math.max(dp[i-2], stairs[i-1]+dp[i-3])+stairs[i];
+            result[i] = Math.max(result[i-2], step[i-1]+result[i-3])+step[i];
         }
-        System.out.println(dp[n]);
+
+
+        System.out.println(result[n]);
+
 
     }
 }
