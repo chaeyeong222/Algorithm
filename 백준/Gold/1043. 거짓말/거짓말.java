@@ -1,87 +1,81 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
-
-public class Main {
+import java.io.*;
+import java.util.*;
+//## 거짓말
+class Main {
     static int[] parent;
-    static int parentTrue; //진실을 알고 있는  집합의 사람들 사이의 부모인덱스
-    public static void main(String[] args) throws Exception {
+    static int truthParent;
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         int n = Integer.parseInt(st.nextToken()); //사람수
-        int m = Integer.parseInt(st.nextToken());  //파티수
+        int m = Integer.parseInt(st.nextToken()); //파티수
+        st = new StringTokenizer(br.readLine());
+        int k = Integer.parseInt(st.nextToken());
+        int[] truePeople = new int[k];
         parent = new int[n+1];
-        //초기에는 자기 자신이 부모
-        for (int i = 0; i < n+1; i++) {
+        for (int i = 0; i < n+1; i++) { //초기에는 자기 자신이 부모
             parent[i] = i;
         }
-        
-        parentTrue =0;//초기화
-        st = new StringTokenizer(br.readLine());
-        int participants = Integer.parseInt(st.nextToken());
-        int[] truePeople = new int[participants];
-        for (int i = 0; i < participants; i++) {
+        for (int i = 0; i < k; i++) {  //진실을 아는 사람들
             truePeople[i] = Integer.parseInt(st.nextToken());
         }
-        //진실을 알고있는 사람 집합 만들기
-        for (int i = 0; i < participants-1; i++) {
-            union(truePeople[i], truePeople[i+1]);
+        for (int i = 0; i < k-1; i++) { //아는사람들끼리 모아주기
+            union(truePeople[i],truePeople[i+1]);
         }
-        
-        if(truePeople.length!=0){
-            parentTrue = truePeople[0];
+        truthParent = 0;
+        if(truePeople.length!=0){ //진실을 아는 사람이 있다면
+            truthParent = find(truePeople[0]);
         }
-        
-        int[][] party = new int[m][];
+        //거짓말가능한 그룹 체크
+        int[][] people = new int[m][];
         for (int i = 0; i < m; i++) {
             st = new StringTokenizer(br.readLine());
-            int p = Integer.parseInt(st.nextToken());
-            party[i] = new int[p];
-            for (int j = 0; j < p; j++) {
-                party[i][j] = Integer.parseInt(st.nextToken());
-            }
+            int group = Integer.parseInt(st.nextToken());
 
-            for (int j = 0; j < p-1; j++) {
-                union(party[i][j], party[i][j+1]);
-            } 
+            people[i] = new int[group];
+            for (int j = 0; j < group; j++) {
+                people[i][j] = Integer.parseInt(st.nextToken());
+            }
+            //파티에서 진실을 알게될 사람들
+            for (int j = 0; j < group-1; j++) {
+                union(people[i][j] , people[i][j+1]);
+            }
         }
-        
-        
-        int cnt = 0;
+
+        int answer = 0;
         for (int i = 0; i < m; i++) {
-            boolean flag = false;
-            for (int j = 0; j < party[i].length; j++) {
-                if(find(party[i][j])==parentTrue){
-                    flag = true;
+            boolean flag = true;
+            for (int j = 0; j < people[i].length; j++) {
+                if(find(people[i][j])==truthParent){
+                    flag = false;
                     break;
                 }
             }
-            if(!flag) cnt++;
+            if(flag) answer++;
+
         }
-        System.out.println(cnt);
+        System.out.println(answer);
         
         
         
         
     }
-    public static int find(int a){
-        if(parent[a]==a){
-            return a;
+    static int find(int x){
+        if(parent[x] == x) return x;
+        else {
+            return parent[x] = find(parent[x]);
         }
-        return parent[a]=find(parent[a]);
     }
-    public static void union(int a, int b){
-        a = find(a);
-        b = find(b);
-        if(a!=b){
-            if(a==parentTrue){
-                parent[b] = a;
-            }else if(b==parentTrue){
-                parent[a] = b;
+    static void union(int x, int y){
+        int px = find(x);
+        int py = find(y);
+        if(px!=py){
+            if(px == truthParent){
+                parent[py] = px;
+            }else if(py==truthParent){
+                parent[px] = py;
             }else{
-                parent[b] =a;
+                parent[py] = px;
             }
         }
     }
