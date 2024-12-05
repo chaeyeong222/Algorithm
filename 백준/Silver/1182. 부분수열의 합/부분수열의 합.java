@@ -18,7 +18,6 @@ class Main {
     static void recur(int now, int sum){
         if(now==n){
             if( sum==goal) answer++;
-            return;
         }else{
             recur(now+1, sum+num[now]);
             recur(now+1, sum);
