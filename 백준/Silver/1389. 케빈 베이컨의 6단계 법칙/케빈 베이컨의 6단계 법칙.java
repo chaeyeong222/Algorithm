@@ -1,5 +1,4 @@
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.*;
 //## 베이컨의 6단계 법칙
 
@@ -23,7 +22,7 @@ class Main {
                 minNum = i;
             }
         }
-        System.out.println(minNum);
+        System.out.println(minNum);  
     }
     public static void bfs(int now){
         Arrays.fill(dist, 0);
@@ -38,7 +37,7 @@ class Main {
             for (int nn : list[temp]){
                 if(visited[nn]) continue;
                 dist[nn] = dist[temp] + 1;
-                sum += dist[temp] - 1;
+                sum += dist[nn];
                 visited[nn] = true;
                 que.offer(nn);
             }
@@ -49,7 +48,6 @@ class Main {
         for (int i = 1; i < N+1; i++) {
             bfs(i);
         }
-
     }
 
     static void set() throws Exception{
