@@ -4,7 +4,7 @@ class Main {
     static int N,K;
     static List<Integer>[] list;
     static int[] indegree;
-    static int[] answer; 
+    static int[] answer;
     public static void main(String[] args) throws Exception {
         set();
         pro();
@@ -58,16 +58,13 @@ class Main {
         for (int i = 0; i < K; i++) {
             st = new StringTokenizer(br.readLine());
             int peo = Integer.parseInt(st.nextToken());
-            int[] temp = new int[peo];
-            for (int j = 0; j < peo; j++) {
-                temp[j] = Integer.parseInt(st.nextToken());
-            }
-
+            int prev = Integer.parseInt(st.nextToken());
             for (int j = 0; j < peo-1; j++) {
-                int prev = temp[j];
-                int next = temp[j+1];
-                list[prev].add(next);
+                int next = Integer.parseInt(st.nextToken());
+                
                 indegree[next]++;
+                list[prev].add(next);
+                prev = next;
             }
         }
     }
