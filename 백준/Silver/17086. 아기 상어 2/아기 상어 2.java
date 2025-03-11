@@ -35,11 +35,10 @@ class Main {
                 int nr = r + dr[i];
                 int nc = c + dc[i];
 
-                if (nr < 0 || nr >= N || nc < 0 || nc >= M) continue; // 범위 체크
-                if (dist[nr][nc] != -1) continue; // 이미 방문한 칸이면 스킵
-
-                dist[nr][nc] = ndist + 1; // 거리 갱신
-                que.offer(new int[]{nr, nc, ndist + 1});
+                if (nr >= 0 && nr < N && nc >=0 && nc < M && dist[nr][nc]==-1){
+                    dist[nr][nc] = ndist + 1;
+                    que.offer(new int[]{nr, nc, ndist + 1});
+                }
             }
         }
     }
