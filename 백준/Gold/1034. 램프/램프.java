@@ -1,38 +1,43 @@
+import java.io.*;
 import java.util.*;
 
-public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        
-        int N = sc.nextInt(); // 행 개수
-        int M = sc.nextInt(); // 열 개수
-        sc.nextLine(); // 버퍼 비우기
+class Main {
+    static int n, m, k;
+    static int[][] map;
+    static HashMap<String, Integer> pattern;
+    public static void main(String[] args) throws Exception {
+        set();
+        pro();
+    }
+    public static void pro() {
 
-        Map<String, Integer> patternCount = new HashMap<>(); // 패턴별 개수 저장
-        List<Integer> zeroCounts = new ArrayList<>(); // 각 행의 0 개수 저장
-
-        // 램프 상태 입력 받기
-        for (int i = 0; i < N; i++) {
-            String row = sc.nextLine(); // 현재 행
-            patternCount.put(row, patternCount.getOrDefault(row, 0) + 1); // 패턴 등장 횟수 저장
-        }
-
-        int K = sc.nextInt(); // 스위치 누를 횟수
-        int maxRows = 0;
-
-        // 가능한 최대 켜진 행 수 찾기
-        for (String pattern : patternCount.keySet()) {
-            int zeroCount = 0;
-            for (char c : pattern.toCharArray()) {
-                if (c == '0') zeroCount++;
+        int maxCnt = 0;
+        for(String key : pattern.keySet()){
+            int zerocnt =0;
+            for (int i = 0; i < key.length(); i++) {
+                if(key.charAt(i)=='0'){
+                    zerocnt++;
+                }
             }
 
-            // 조건: 0 개수가 K보다 작거나 같아야 하며, (K - 0의 개수)가 짝수여야 함
-            if (zeroCount <= K && (K - zeroCount) % 2 == 0) {
-                maxRows = Math.max(maxRows, patternCount.get(pattern));
+            if(zerocnt<=k && (k-zerocnt)%2==0 ){
+                maxCnt = Math.max(maxCnt, pattern.get(key));
             }
         }
+        System.out.println(maxCnt);
 
-        System.out.println(maxRows);
+    }
+    public static void set() throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+        map = new int[n][m];
+        pattern = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            String line = br.readLine();
+            pattern.put(line, pattern.getOrDefault(line, 0)+1);
+        }
+        k = Integer.parseInt(br.readLine());
     }
 }
