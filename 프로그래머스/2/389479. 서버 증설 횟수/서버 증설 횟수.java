@@ -1,33 +1,23 @@
 import java.util.*;
 import java.io.*;
-
 class Solution {
-    static int[] servers; 
-    static int[] players;
-    static int m,k;
+    static Map<Integer, Integer> map;
     public int solution(int[] players, int m, int k) {
+        map = new HashMap<>();//서버감소시간, 개수
         int answer = 0;
-        this.players = players;
-        this.m = m; //수용인원
-        this.k = k; //증설서버운용시간
-        servers = new int[24]; 
-        for(int i=0; i<24; i++){
-            // 서버당 감당가능한지 체크
-            answer += acceptable(i);
+        int nowServer = 1;
+        for(int i=0; i<players.length; i++){
+            int now = players[i];
+            if(map.containsKey(i)){ //운영끝난 서버 제외
+                nowServer-=map.get(i);
+            }
+            if(players[i] >= m*nowServer){
+                int cnt = (players[i]/m - (nowServer-1));
+                nowServer += cnt;
+                answer += cnt;
+                map.put(i+k,cnt);
+            }
         }
         return answer;
-    }
-    public int acceptable(int idx){
-        if(players[idx] < servers[idx] * m + m - 1){
-            return 0;
-        }else{
-            int add = (players[idx]/m) - servers[idx];
-            for(int i=0; i<k; i++){
-                if(idx+i<24){
-                    servers[idx+i] += add; //증설
-                }
-            }
-            return add;
-        }
     }
 }
