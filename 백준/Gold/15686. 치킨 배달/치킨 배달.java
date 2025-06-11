@@ -47,26 +47,20 @@ class Main {
     public static void checkDistance(int[][] cloneMap){ // 완성된 map 으로 거리 테스트
         int sum = 0;
         for(int[] hList : house){
-            Queue<int[]> que = new LinkedList<>();
-            boolean[][] visited = new boolean[N][N];
-            que.offer(new int[]{hList[0],hList[1]});
-            visited[hList[0]][hList[1]]=true;
-            while(!que.isEmpty()){
-                if(sum>answer) return; //중간에 넘치면 끝
-                int[] now = que.poll();
-                if(cloneMap[now[0]][now[1]]==2){
-                    sum += Math.abs(hList[0]-now[0])+Math.abs(hList[1]-now[1]);
-                    break;
-                }
-                for (int i = 0; i < 4; i++) {
-                    int nr = now[0]+dr[i];
-                    int nc = now[1]+dc[i];
-                    if(nr>=0 && nr<N && nc>=0 && nc<N && !visited[nr][nc]){
-                        que.offer(new int[]{nr, nc});
-                        visited[nr][nc] = true;
-                    }
-                }
-            }
+            int min = Integer.MAX_VALUE;
+             int r = hList[0];
+             int c = hList[1];
+             for(int i=0; i<chicken.size(); i++){
+                 if(visited[i]) {
+                     int[] chick = chicken.get(i);
+                     int rr = chick[0];
+                     int cc = chick[1];
+                     int distance = Math.abs(r - rr) + Math.abs(c - cc);
+                     min = Math.min(min, distance);
+                 }
+             }
+             sum+=min;
+             if(sum >= answer) return;
         }
         answer = Math.min(sum, answer); //갱신
     }
