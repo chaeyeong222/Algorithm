@@ -19,19 +19,7 @@ class Main {
         System.out.println(answer);
     }
     public static void trace(int idx, int cnt) {
-        if (cnt == M) {
-            // M개 선택 완료 -> 거리 계산
-//            int[][] temp = new int[N][N];
-//            for (int i = 0; i < N; i++) {
-//                temp[i] = map[i].clone();
-//            }
-//            for (int i = 0; i < chicken.size(); i++) {
-//                if (!visited[i]) {
-//                    int[] remove = chicken.get(i);
-//                    temp[remove[0]][remove[1]] = 0;
-//                }
-//            }
-//            checkDistance(temp);
+        if (cnt == M) { 
             checkDistance();
             return;
         }
