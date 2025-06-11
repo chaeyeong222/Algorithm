@@ -21,17 +21,18 @@ class Main {
     public static void trace(int idx, int cnt) {
         if (cnt == M) {
             // M개 선택 완료 -> 거리 계산
-            int[][] temp = new int[N][N];
-            for (int i = 0; i < N; i++) {
-                temp[i] = map[i].clone();
-            }
-            for (int i = 0; i < chicken.size(); i++) {
-                if (!visited[i]) {
-                    int[] remove = chicken.get(i);
-                    temp[remove[0]][remove[1]] = 0;
-                }
-            }
-            checkDistance(temp);
+//            int[][] temp = new int[N][N];
+//            for (int i = 0; i < N; i++) {
+//                temp[i] = map[i].clone();
+//            }
+//            for (int i = 0; i < chicken.size(); i++) {
+//                if (!visited[i]) {
+//                    int[] remove = chicken.get(i);
+//                    temp[remove[0]][remove[1]] = 0;
+//                }
+//            }
+//            checkDistance(temp);
+            checkDistance();
             return;
         }
         if (idx == chicken.size()) return; // 인덱스 초과 시 종료
@@ -44,7 +45,7 @@ class Main {
         visited[idx] = false;
         trace(idx + 1, cnt);
     }
-    public static void checkDistance(int[][] cloneMap){ // 완성된 map 으로 거리 테스트
+    public static void checkDistance(){ // 완성된 map 으로 거리 테스트
         int sum = 0;
         for(int[] hList : house){
             int min = Integer.MAX_VALUE;
