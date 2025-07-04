@@ -1,53 +1,48 @@
 import java.util.*;
 
 class Solution {
-    static Map<String, Integer> combinationCount;
+    static Map<String, Integer> combinationCnt;
     static List<String> answer;
 
-    public ArrayList<String> solution(String[] orders, int[] course) {
+    public ArrayList<String> solution(String[] orders, int[] course) { 
         answer = new ArrayList<>();
-
-        for (int len : course) {
-            combinationCount = new HashMap<>();
-            int maxCount = 0;
-
-            for (String order : orders) {
-                char[] arr = order.toCharArray();
-                Arrays.sort(arr); // 사전 순 정렬 필수
-
-                getCombinations(arr, new StringBuilder(), 0, len);
+        
+        for(int len : course){
+            int max = 0;
+            combinationCnt = new HashMap<>();
+            for(String order : orders){
+                char[] alpha = order.toCharArray();
+                Arrays.sort(alpha);
+                makeCombi(alpha, new StringBuilder(), 0, len);
             }
-
-            // 가장 많이 나온 조합 찾기
-            for (Map.Entry<String, Integer> entry : combinationCount.entrySet()) {
-                int count = entry.getValue();
-                if (count >= 2) {
-                    maxCount = Math.max(maxCount, count);
+            
+            //가장 많이 나온 조합 찾기
+            
+            for( Map.Entry<String,Integer> entry : combinationCnt.entrySet()){
+                int cnt = entry.getValue();
+                if(cnt>=2){
+                    max = Math.max(cnt, max);
                 }
             }
-
-            for (Map.Entry<String, Integer> entry : combinationCount.entrySet()) {
-                if (entry.getValue() == maxCount) {
+            for( Map.Entry<String,Integer> entry : combinationCnt.entrySet()){
+                if (entry.getValue() == max) {
                     answer.add(entry.getKey());
                 }
             }
+            
         }
-
         Collections.sort(answer); // 최종 결과 정렬
         return new ArrayList<>(answer);
     }
-
-    // 조합 생성
-    private void getCombinations(char[] arr, StringBuilder sb, int idx, int targetLen) {
-        if (sb.length() == targetLen) {
-            String combo = sb.toString();
-            combinationCount.put(combo, combinationCount.getOrDefault(combo, 0) + 1);
+    public void makeCombi(char[] alpha, StringBuilder sb, int idx, int targetLen ){
+        if(sb.length()==targetLen){
+            String temp = sb.toString();
+            combinationCnt.put(temp, combinationCnt.getOrDefault(temp, 0)+1);
             return;
         }
-
-        for (int i = idx; i < arr.length; i++) {
-            sb.append(arr[i]);
-            getCombinations(arr, sb, i + 1, targetLen);
+        for(int i=idx; i<alpha.length; i++){
+            sb.append(alpha[i]);
+            makeCombi(alpha, sb, i+1, targetLen);
             sb.deleteCharAt(sb.length() - 1);
         }
     }
