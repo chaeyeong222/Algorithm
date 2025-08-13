@@ -2,34 +2,32 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static int N, M; 
+    static int N, M;
+    static long answer;
+
     public static void main(String[] args) throws IOException {
         set();
-        pro(); 
+        answer = Long.MAX_VALUE;
+        dfs(N, 0); 
+        System.out.println(answer == Long.MAX_VALUE ? -1 : answer + 1);
     }
-    public static void pro(){
-        Queue<long[]> que = new LinkedList<>();
-        que.offer(new long[]{N,0});
-        while(!que.isEmpty()){
-            long[] temp = que.poll();
-            if(temp[0]==M) {
-                System.out.println(temp[1]+1);
-                return;
-            }
-            if(temp[0]*2<=M){
-                que.offer(new long[]{temp[0]*2, temp[1]+1});
-            }
-            if(temp[0]*10+1<=M){
-                que.offer(new long[]{temp[0]*10+1, temp[1]+1});
-            }
+
+    public static void dfs(long now, long cnt) {
+        if (now > M) return;       
+        if (cnt >= answer) return;
+        if (now == M) {
+            answer = Math.min(answer, cnt);
+            return;
         }
-        System.out.println(-1);
+
+        dfs(now * 2, cnt + 1);
+        dfs(now * 10 + 1, cnt + 1);
     }
 
     static void set() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken()); 
+        M = Integer.parseInt(st.nextToken());
     }
 }
