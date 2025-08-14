@@ -3,28 +3,23 @@ import java.util.*;
 
 public class Main {
     static int N, M, goal;
-    static List<Neighbor>[] list;
+    static List<Neighbor>[] graph, reverseGraph;
     static int[] answer;
     public static void main(String[] args) throws IOException {
         set();
         pro();
-        print();
-    }
-    public static void print(){
-        int ans = 0; 
-        for (int i = 1; i <= N; i++) {
-            ans = Math.max(ans, answer[i]); 
-        } 
-        System.out.println(ans);
     }
     public static void pro(){
+        int[] distFromX = dijk(goal, graph);
+        int[] distToX = dijk(goal, reverseGraph);
+        int max = 0;
         for(int i=1; i<=N; i++){
-            if(i==goal) continue;
-            daik1(i);
-            daik2(i);
+            max = Math.max(distFromX[i]+distToX[i], max);
         }
+        System.out.println(max);
+
     }
-    public static void daik1(int start){
+    public static int[] dijk(int start, List<Neighbor>[] g ){
         int[] dist = new int[N+1];
         Arrays.fill(dist, Integer.MAX_VALUE);
         dist[start] = 0;
@@ -37,42 +32,15 @@ public class Main {
         pq.offer(new Neighbor(start, 0));
         while(!pq.isEmpty()){
             Neighbor now = pq.poll();
-            if(now.idx==goal){
-                answer[start] = dist[now.idx];
-                break;
-            }
-            for(Neighbor next : list[now.idx]){
+            if(now.distance > dist[now.idx]) continue;
+            for(Neighbor next : g[now.idx]){
                 if(dist[next.idx] > dist[now.idx]+next.distance){
                     dist[next.idx] = dist[now.idx]+next.distance;
                     pq.offer(new Neighbor(next.idx, dist[next.idx]));
                 }
             }
         }
-    }
-    public static void daik2(int end){
-        int[] dist = new int[N+1];
-        Arrays.fill(dist, Integer.MAX_VALUE);
-        dist[goal] = 0;
-        PriorityQueue<Neighbor> pq = new PriorityQueue<>(new Comparator<Neighbor>(){
-            @Override
-            public int compare(Neighbor o1, Neighbor o2){
-                return o1.distance-o2.distance;
-            }
-        });
-        pq.offer(new Neighbor(goal, 0));
-        while(!pq.isEmpty()){
-            Neighbor now = pq.poll();
-            if(now.idx==end){
-                answer[end] += dist[now.idx];
-                break;
-            }
-            for(Neighbor next : list[now.idx]){
-                if(dist[next.idx] > dist[now.idx]+next.distance){
-                    dist[next.idx] = dist[now.idx]+next.distance;
-                    pq.offer(new Neighbor(next.idx, dist[next.idx]));
-                }
-            }
-        }
+        return dist;
     }
 
     static void set() throws IOException {
@@ -81,16 +49,19 @@ public class Main {
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
         goal = Integer.parseInt(st.nextToken());
-        list = new ArrayList[N+1];
+        graph = new ArrayList[N+1];
+        reverseGraph = new ArrayList[N+1];
         for (int i = 0; i <= N; i++) {
-            list[i] = new ArrayList<>();
+            graph[i] = new ArrayList<>();
+            reverseGraph[i] = new ArrayList<>();
         }
         for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
             int cost = Integer.parseInt(st.nextToken());
-            list[a].add(new Neighbor(b,cost));
+            graph[a].add(new Neighbor(b,cost));
+            reverseGraph[b].add(new Neighbor(a,cost));
         }
         answer = new int[N+1];
 
