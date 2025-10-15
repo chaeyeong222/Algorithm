@@ -1,41 +1,44 @@
 import java.io.*;
 import java.util.*;
-//## 입국심사
-class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int n = Integer.parseInt(st.nextToken());
-        long m = Integer.parseInt(st.nextToken());
-        long[] num = new long[n];
-        for (int i = 0; i < n; i++) {
-            num[i] = Integer.parseInt(br.readLine());
-        }
 
-        Arrays.sort(num);
-        long start = 1;
-        long end = (num[n-1]*m);
-
-        long result = Long.MAX_VALUE;
-        long mid=0;
+public class Main {
+    static int N, M;
+    static int[] num;
+    static long answer;
+    public static void main(String[] args) throws Exception{
+        set();
+        pro();
+    }
+    public static void pro(){
+        long start = 0;
+        long end = (long)1e18; 
         while(start<=end){
-            mid = (start+end)/2;
-            long cnt = 0;
-            for (long temp : num){
-                if(cnt>=m) {break;}
-                cnt += (mid/temp);
-
-            }
-
-            if(cnt>=m){
-                end = mid -1;
-                result = Math.min(result, mid);
+            long mid = (start+end)/2;
+            if(check(mid)){
+                answer = mid;
+                end = mid-1;
             }else{
                 start = mid+1;
             }
         }
-        System.out.println(result);
-
-
+        System.out.println(answer);
+    }
+    public static boolean check(long mid){
+        long peo = 0;
+        for (int i = 0; i < N; i++) {
+            peo += mid / num[i];
+            if(peo >= M) return true; // 조기 종료
+        }
+        return false;
+    }
+    public static void set() throws Exception{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        num = new int[N];
+        for (int i = 0; i < N; i++) {
+            num[i] = Integer.parseInt(br.readLine());
+        }
     }
 }
