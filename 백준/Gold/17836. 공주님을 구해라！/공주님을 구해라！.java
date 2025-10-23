@@ -11,40 +11,35 @@ public class Main {
         pro();
     }
     public static void pro(){
-        int original = findRoot(0,0, N-1, M-1); //원래걸리는시간
+        int direct = findRoot(0,0, N-1, M-1, false); //원래걸리는시간
 
-        int findTool = findRoot(0,0,toolR, toolC);
-        int breakWall = Math.abs((N-1)-toolR) + Math.abs((M-1)-toolC);
+        int withTool = -1;
+        int toTool = findRoot(0,0,toolR, toolC, false);
+        if(toTool !=-1){
+            int fromTool = Math.abs((N-1) - toolR) + Math.abs((M-1) - toolC);
+            withTool = toTool + fromTool;
+        }
 
-        if(original==-1 && findTool==-1) { //둘다불가능
-            System.out.println("Fail");
-            return;
+        int result = -1;
+        if(direct !=-1 && direct<=T){
+            result = direct;
         }
-        //1은가능2는불가능
-        if(original!=-1 && findTool==-1 && original<=T){
-            System.out.println(original);
-            return;
-        }
-        //1은불가능 2는 가능
-        if(original==-1 && findTool!=-1 && findTool+breakWall <=T){
-            System.out.println(findTool+breakWall);
-            return;
-        }
-        //둘다가능
-        if(original!=-1 && findTool!=-1){
-            int minTime = Math.min(original, findTool+breakWall);
-            if(minTime <= T) {
-                System.out.println(minTime);
-            } else {
-                System.out.println("Fail");
+
+        if(withTool!= -1 && withTool<=T){
+            if(result == -1){
+                result = withTool;
+            }else {
+                result = Math.min(direct, withTool);
             }
-            return;
         }
-
-        System.out.println("Fail");
+        if(result==-1){
+            System.out.println("Fail");
+        }else {
+            System.out.println(result);
+        }
 
     }
-    public static int findRoot(int r, int c, int goalr, int goalc){
+    public static int findRoot(int r, int c, int goalr, int goalc, boolean hasTool){
         boolean[][] visited = new boolean[N][M];
         visited[r][c] = true;
         Queue<int[]> que = new LinkedList<>();
@@ -57,9 +52,11 @@ public class Main {
             for (int i = 0; i < 4; i++) {
                 int nr = now[0]+dr[i];
                 int nc = now[1]+dc[i];
-                if(nr>=0 && nr<N && nc>=0 && nc<M && map[nr][nc]!=1 && !visited[nr][nc]){
-                    visited[nr][nc]= true;
-                    que.offer(new int[]{nr,nc,now[2]+1});
+                if(nr>=0 && nr<N && nc>=0 && nc<M && !visited[nr][nc]){
+                    if(hasTool || map[nr][nc]!=1){
+                        visited[nr][nc]= true;
+                        que.offer(new int[]{nr,nc,now[2]+1});
+                    }
                 }
             }
         }
