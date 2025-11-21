@@ -9,22 +9,27 @@ public class Main {
         pro();
     }
     public static void pro(){
-        Set<Integer> possible = new HashSet<>();
-        possible.add(0);
+        int max = 15001;
+        boolean[][] dp = new boolean[N+1][max];
+        dp[0][0] = true;
 
-        for(int w : weight){
-            Set<Integer> next = new HashSet<>(possible);
-            for(int p : possible){
-                next.add(p+w);
-                next.add(Math.abs(p-w));
+        for (int i = 1; i <= N; i++) {
+            int w = weight[i-1];
+            for (int j = 0; j < max; j++) {
+                if(dp[i-1][j]){
+                    dp[i][j] = true;
+                    if(j+w<=max) dp[i][j+w] = true;
+                    dp[i][Math.abs(j-w)] = true;
+                }
             }
-            possible = next;
+
         }
 
         StringBuilder sb = new StringBuilder();
         for(int b : ball){
-            if(possible.contains(b)) sb.append('Y').append(' ');
-            else sb.append('N').append(' ');
+            if(b > max) sb.append("N ");
+            else if(dp[N][b]) sb.append("Y ");
+            else sb.append("N ");
         }
         System.out.println(sb);
 
