@@ -1,49 +1,45 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {
-    static int N, M;
-    static int[][] map;
-    static int[][] dp;
-    public static void main(String[] args) throws IOException {
+class Main {
+    static StringBuilder sb;
+    static int[][] num, sum;
+    static int N, M ;
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-        map = new int[N][N];
-        dp = new int[N][N];
-        for (int i = 0; i < N; i++) {
+        num = new int[N+1][N+1];
+        sb = new StringBuilder();
+        for (int i = 1; i <= N; i++) {
             st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < N; j++) {
-                map[i][j] = Integer.parseInt(st.nextToken());
-                if (j == 0) dp[i][j] = map[i][j];
-                else dp[i][j] = dp[i][j - 1] + map[i][j];
+            for (int j = 1; j <= N; j++) {
+                num[i][j] = Integer.parseInt(st.nextToken());
             }
         }
-        //
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < M; i++) {
+        sum = new int[N+1][N+1];
+        sum[1][1] = num[1][1];
+        for (int i = 2; i <= N; i++) {
+            sum[1][i] = sum[1][i-1]+num[1][i];
+            sum[i][1] = sum[i-1][1]+num[i][1];
+        }
+        for (int i = 2; i <= N; i++) {
+            for (int j = 2; j <= N; j++) {
+                sum[i][j] = sum[i][j-1] + sum[i-1][j]-sum[i-1][j-1] +  num[i][j];
+            }
+        }
+        for (int TC = 0; TC < M; TC++) {
             st = new StringTokenizer(br.readLine());
-            int startR = Integer.parseInt(st.nextToken())-1;
-            int startC = Integer.parseInt(st.nextToken())-1;
-            int endR = Integer.parseInt(st.nextToken())-1;
-            int endC = Integer.parseInt(st.nextToken())-1;
-            sb.append(cal(startR,startC,endR,endC)).append('\n');
+            int r1 = Integer.parseInt(st.nextToken());
+            int c1 = Integer.parseInt(st.nextToken());
+            int r2 = Integer.parseInt(st.nextToken());
+            int c2 = Integer.parseInt(st.nextToken());
+            sb.append(getSum(r1,c1,r2,c2)).append('\n');
         }
         System.out.println(sb);
-
     }
-    public static int cal(int sR, int sC, int eR, int eC){
-        int sum = 0;
-        if(sC==0){
-            for (int i = sR; i <= eR; i++) {
-                sum += dp[i][eC];
-            }
-        }else{
-            for (int i = sR; i <= eR; i++) {
-                sum += dp[i][eC]-dp[i][sC-1];
-            }
-        }
-        return sum;
+    public static int getSum(int r1, int c1, int r2, int c2){
+        return sum[r2][c2]-sum[r1-1][c2]-sum[r2][c1-1]+sum[r1-1][c1-1];
     }
 }
