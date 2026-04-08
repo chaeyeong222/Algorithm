@@ -1,29 +1,36 @@
 import java.util.*;
 import java.io.*;
 class Solution {
-    static boolean[] visited; 
-    static int answer;
-    public int solution(int k, int[][] dungeons) { 
-        answer = 0;  
-        visited = new boolean[dungeons.length];
-        for(int i=0; i<dungeons.length; i++){ 
-            visited[i] = true;
-            if(k>=dungeons[i][0]) {
-              check(k-dungeons[i][1], 1 , dungeons);
-            }
-            visited[i] = false;
-        } 
+    int n;
+    int[][] dungeons; 
+    int[] visited;
+    int answer;
+    public int solution(int k, int[][] dungeons) {
+        answer = 0;
+        n = dungeons.length; 
+        visited = new int[n];
+        this.dungeons = dungeons;
+        
+        travel(0, 0, k);
         return answer;
     }
-    public void check(int power, int depth, int[][] dungeons){
-        answer = Math.max(depth, answer);
-        //방문체크
-        for(int i=0; i<dungeons.length; i++){
-            if(!visited[i] && power>=dungeons[i][0]){
-                visited[i] = true;
-                check(power-dungeons[i][1], depth+1, dungeons);
-                visited[i] = false;
+    public void travel(int depth, int cnt, int tired){
+        if(depth>n) return;
+        if(cnt>answer){
+            answer = cnt; 
+        }
+        if(depth==n){  
+            return;
+        }
+        if(tired<0) return;
+        for(int i=0; i<n; i++){
+            if(visited[i]==0 && dungeons[i][0]<=tired){ 
+                visited[i] = 1; //방문처
+                travel(depth+1, cnt+1, tired-dungeons[i][1]);
+                visited[i] = 0;
             }
-        }  
+        }
+        
+        
     }
 }
