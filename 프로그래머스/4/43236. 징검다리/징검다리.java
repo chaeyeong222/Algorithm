@@ -1,45 +1,42 @@
 import java.util.*;
 class Solution {
-    int k, n, distance;
+    int n,m;
+    int distance, answer;
     int[] rocks;
     public int solution(int distance, int[] rocks, int n) {
-        int answer = 0;
-        k = rocks.length;
-        this.distance = distance;
-        this.rocks = rocks;
+        answer = 0;
         this.n = n;
-        if(k==n) return distance;
-        Arrays.sort(rocks); //바위정렬
-        int start = 1;
-        int end = distance;
-        while(start<=end){
-            int mid = (start+end)/2;
-            if(countRock(mid)){
-                answer = Math.max(answer,mid);
-                start = mid+1;
+        this.rocks = rocks;
+        m = rocks.length;
+        this.distance = distance;
+        Arrays.sort(rocks);
+        int left = 0;
+        int right = 1000000000;
+        while(left<=right){
+            int mid = (left+right)/2;
+            if(check(mid)){
+                left = mid+1;
+                answer = mid;
             }else{
-                end = mid-1;
-                
-            } 
+                right = mid-1;
+            }
         }
-        
         return answer;
     }
-    public boolean countRock(int mid){
+    public boolean check(int pivot){
         int prev = 0;
-        int cnt = 0;
-        for(int i=0; i<k; i++){
-            if(rocks[i]-prev < mid){
+        int cnt=0;
+        for(int i=0; i<m; i++){
+            if(rocks[i]-prev<pivot){
                 cnt++;
             }else{
                 prev = rocks[i];
             }
-            if(cnt>n) return false;
+            if(cnt>n) return false; 
         }
-        if(distance-prev<mid){
-            cnt++;   
-        }
+        
+        if(distance-prev<pivot) cnt++;
         if(cnt>n) return false;
-        return true;
+        return true; 
     }
 }
