@@ -1,10 +1,10 @@
 # [level 3] 없어진 기록 찾기 - 59042 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/59042?gad_source=1&gad_campaignid=22215033033&gbraid=0AAAAAC_c4nCG8mZC7374E14Nyx9d30D7z&gclid=Cj0KCQjw_L_FBhDmARIsAItqgt7qXIjdJFADxcgnmx5UvXAdLuiy7Modedgl54YQvdOQNhLvixwgedoaAoV8EALw_wcB) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/59042) 
 
 ### 성능 요약
 
-메모리: 0.0 MB, 시간: 0.00 ms
+메모리: undefined, 시간: 
 
 ### 구분
 
@@ -12,11 +12,11 @@
 
 ### 채점결과
 
-Empty
+합계: 100.0 / 100.0
 
 ### 제출 일자
 
-2025년 08월 29일 12:13:51
+2026년 10월 06일 20:47:54
 
 ### 문제 설명
 
