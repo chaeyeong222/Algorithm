@@ -1,7 +1,10 @@
-select fi.id, fni.fish_name, fi.length
-from fish_info as fi join fish_name_info as fni on fi.fish_type=fni.fish_type
-join (
-select fish_type, max(length) as maxlength
-from fish_info
-group by fish_type) as maxfi on fi.fish_type=maxfi.fish_type and fi.length = maxfi.maxlength
-order by fi.id asc;
+-- 코드를 작성해주세요
+SELECT FI.ID, FNI.FISH_NAME, FI.LENGTH
+FROM FISH_INFO FI JOIN FISH_NAME_INFO FNI ON FI.FISH_TYPE = FNI.FISH_TYPE
+                  JOIN (SELECT FI2.FISH_TYPE, MAX(FI2.LENGTH) MAXLENGTH
+                       FROM FISH_INFO FI2 
+                       GROUP BY FI2.FISH_TYPE) T ON T.FISH_TYPE = FI.FISH_TYPE
+WHERE FI.LENGTH = T.MAXLENGTH
+ORDER BY FI.ID ASC;
+ 
+  
