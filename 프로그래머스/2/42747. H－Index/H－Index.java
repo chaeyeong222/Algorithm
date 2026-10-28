@@ -1,16 +1,12 @@
 import java.util.*;
-import java.io.*;
-
 class Solution {
     public int solution(int[] citations) {
-        int answer = 0; 
-        Arrays.sort(citations);   
-        for(int i=0; i<citations.length; i++){
-            int h = citations.length -i;
-            if(citations[i] >= h){
-                answer = h;
-                break;
-            }
+        int answer = 0;
+        int n = citations.length; 
+        Arrays.sort(citations); 
+        for(int i=0; i<n; i++){ 
+            int h = n-i;
+            if(citations[i]>=h) return h;
         }
         return answer;
     }
